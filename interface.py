@@ -112,10 +112,10 @@ def run_interface(objects, custom_degree=False, snes=False, codes=None):
         random_degree = 0.5
 
     if sourcefile is None:
-        sourcefile = raw_input("Rom filename? ")
+        sourcefile = input("Rom filename? ")
 
     if seed is None and num_args < 2:
-        seed = raw_input("Seed? (blank for random) ").strip()
+        seed = input("Seed? (blank for random) ").strip()
 
     if seed is None or seed == "":
         seed = time()
@@ -145,7 +145,7 @@ def run_interface(objects, custom_degree=False, snes=False, codes=None):
                 print "    %s  Randomize %s." % (o.flag,
                                                  o.flag_description.lower())
             print
-            flags = raw_input("Flags? (blank for all) ").strip()
+            flags = input("Flags? (blank for all) ").strip()
             user_input_flags = flags
         elif flags is None:
             flags = allflags
@@ -206,7 +206,7 @@ def run_interface(objects, custom_degree=False, snes=False, codes=None):
             if custom_split:
                 print ("\nIf you would like even more control over the "
                        "randomness, type \"custom\" here.")
-            random_degree = raw_input("Randomness? (default: 0.5) ").strip()
+            random_degree = input("Randomness? (default: 0.5) ").strip()
             if not random_degree:
                 random_degree = 0.5
 
@@ -224,7 +224,7 @@ def run_interface(objects, custom_degree=False, snes=False, codes=None):
             for k in sorted(custom_dict):
                 os = sorted(custom_dict[k], key=lambda o: o.__name__)
                 onames = ", ".join([o.__name__ for o in os])
-                s = raw_input("Randomness for %s? " % onames).strip()
+                s = input("Randomness for %s? " % onames).strip()
                 if not s:
                     continue
                 for o in os:
@@ -233,7 +233,7 @@ def run_interface(objects, custom_degree=False, snes=False, codes=None):
                     crd = min(1.0, max(0.0, crd))
                     o.custom_random_degree = crd ** 2
 
-            random_degree = raw_input("Randomness for everything"
+            random_degree = input("Randomness for everything"
                                       " unspecified? ").strip()
             if not random_degree:
                 random_degree = 0.5
@@ -305,4 +305,4 @@ def finish_interface():
     print "MD5 hash: %s" % md5hash(outfile)
     print
     if len(argv) < 2:
-        raw_input("Press Enter to close this program. ")
+        input("Press Enter to close this program. ")

@@ -1,4 +1,4 @@
-from utils import (read_multi, write_multi, classproperty,
+from .utils import (read_multi, write_multi, classproperty,
                    random, md5hash, cached_property)
 from functools import total_ordering
 from os import path
@@ -87,15 +87,15 @@ def determine_global_table(outfile):
     if h in tablefiles:
         label, filename = tablefiles[h]
     else:
-        print "Unrecognized rom file: %s" % h
+        print("Unrecognized rom file: %s" % h)
         for i, label in enumerate(sorted(labelfiles)):
-            print "%s. %s" % ((i+1), label)
+            print("%s. %s" % ((i+1), label))
         if len(labelfiles) > 1:
-            selection = int(raw_input("Choose 1-%s: " % len(labelfiles)))
+            selection = int(input("Choose 1-%s: " % len(labelfiles)))
             label = sorted(labelfiles.keys())[selection-1]
             filename = labelfiles[label]
         else:
-            raw_input("Using this rom information. Okay? ")
+            input("Using this rom information. Okay? ")
             label = sorted(labelfiles.keys())[0]
             filename = labelfiles[label]
     GLOBAL_LABEL = label
@@ -181,14 +181,11 @@ def select_patches():
     if not OPTION_FILENAMES:
         return
 
-    print
-    print "The following optional patches are available."
+    print("The following optional patches are available.")
     for i, patchfilename in enumerate(OPTION_FILENAMES):
-        print "%s: %s" % (i+1, patchfilename.split('.')[0])
-    print
-    s = raw_input("Select which patches to use, separated by a space."
+        print("%s: %s" % (i+1, patchfilename.split('.')[0]))
+    s = input("Select which patches to use, separated by a space."
                   "\n(0 for none, blank for all): ")
-    print
     s = s.strip()
     if not s:
         return
@@ -271,7 +268,7 @@ def write_patches(outfile):
     if not PATCH_FILENAMES:
         return
 
-    print "Writing patches..."
+    print("Writing patches...")
     for patchfilename in PATCH_FILENAMES:
         write_patch(outfile, patchfilename)
 
@@ -280,7 +277,7 @@ def verify_patches(outfile):
     if not PATCH_FILENAMES:
         return
 
-    print "Verifying patches..."
+    print("Verifying patches...")
     f = get_open_file(outfile)
     for patchfilename in PATCH_FILENAMES:
         if patchfilename in NOVERIFY_PATCHES:
@@ -361,7 +358,7 @@ def mutate_normal(base, minimum, maximum, random_degree=None,
         subwidth = maxwidth
     else:
         width_factor = 1.0
-        for _ in xrange(7):
+        for _ in range(7):
             width_factor *= random.uniform(random_degree, width_factor)
         subwidth = (minwidth * (1-width_factor)) + (maxwidth * width_factor)
     if factor > 0.5:
@@ -464,6 +461,7 @@ class TableObject(object):
         self.pointer = pointer
         self.groupindex = groupindex
         self.variable_size = size
+        print(f'{filename} index is {index} {groupindex}')
         self.index = index
         if filename:
             self.read_data(filename, pointer)
@@ -900,7 +898,7 @@ class TableObject(object):
                 else:
                     number, numbytes = size, 1
                 value = []
-                for i in xrange(number):
+                for i in range(number):
                     value.append(read_multi(f, numbytes))
             self.old_data[name] = copy(value)
             setattr(self, name, value)
@@ -1183,7 +1181,7 @@ class TableObject(object):
         self.reseed(salt="magmutbit")
         for attributes in sorted(self.magic_mutate_bit_attributes):
             masks = self.magic_mutate_bit_attributes[attributes]
-            if isinstance(attributes, basestring):
+            if isinstance(attributes, str):
                 del(self.magic_mutate_bit_attributes[attributes])
                 attributes = tuple([attributes])
             if masks is None:
@@ -1368,7 +1366,7 @@ class TableObject(object):
                     o2 = random.choice(candidates)
                 else:
                     o2 = o.get_similar(candidates)
-                if isinstance(attributes, basestring):
+                if isinstance(attributes, str):
                     attributes = [attributes]
                 for attribute in attributes:
                     setattr(o, attribute, o2.old_data[attribute])
@@ -1419,7 +1417,7 @@ def get_table_objects(objtype, filename=None):
         if p is None:
             p = pointer
         accumulated_size = 0
-        for i in xrange(n):
+        for i in range(n):
             obj = objtype(filename, p, index=len(objects),
                           groupindex=groupindex)
             objects.append(obj)
@@ -1501,7 +1499,7 @@ def get_table_objects(objtype, filename=None):
             counter += 1
     elif delimit:
         f = get_open_file(filename)
-        for counter in xrange(number):
+        for counter in range(number):
             while True:
                 f.seek(pointer)
                 peek = ord(f.read(1))
@@ -1587,7 +1585,7 @@ def set_table_specs(filename=None):
                 objname, tablefilename, pointerfilename = tuple(line)
             else:
                 objname, tablefilename, pointer, count = tuple(line)
-        if pointer is not None and isinstance(pointer, basestring):
+        if pointer is not None and isinstance(pointer, str):
             if ',' in pointer:
                 pointers = map(lambda p: int(p, 0x10), pointer.split(','))
                 pointer = pointers[0]
